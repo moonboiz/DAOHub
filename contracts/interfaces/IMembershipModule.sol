@@ -3,8 +3,8 @@
 pragma solidity 0.8.13;
 
 
-interface IMembershipModule {
-        /**
+interface IMembershipModule {    
+    /**
      * @notice Gets whether an address (user wallet) is a member of daoName.
      * 
      * @param addr The wallet address of the user to check.

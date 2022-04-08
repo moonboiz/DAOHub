@@ -12,12 +12,18 @@ contract DAOProxy is AccessControl, IDAOProxy {
     
     address private _hub;
     address private _membershipModule;
+    address private _treasury;
 
-    constructor(address hub) public {
+    constructor(address hub) {
         _hub = hub;
     }
 
-    function initialize(address membershipModule) external {
+    function initialize(address membershipModule, address treasury) external {
+        _membershipModule = membershipModule;
+        _treasury = treasury;
+    }
+
+    function setMembershipModule(address membershipModule) external {
         _membershipModule = membershipModule;
     }
 
@@ -31,5 +37,9 @@ contract DAOProxy is AccessControl, IDAOProxy {
 
     function getMembers() external view returns (address[] memory){
         return IMembershipModule(_membershipModule).getMembers();
+    }
+
+    function balanceOf(address token) external view returns (uint) {
+        return IERC20(token).balanceOf(_treasury);
     }
 }

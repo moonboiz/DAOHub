@@ -7,6 +7,12 @@ import {IMembershipModule} from "../interfaces/IMembershipModule.sol";
 
 
 contract ERC20MembershipModule is AccessControl, IMembershipModule {
+
+    address private _token;
+
+    constructor(address token) {
+        _token = token;
+    }
     
     function isMember(address addr) external view returns (bool) {
         return false;
@@ -17,6 +23,8 @@ contract ERC20MembershipModule is AccessControl, IMembershipModule {
     }
 
     function getMembers() external view returns (address[] memory) {
-        return address[];
+        address[] memory members;
+        
+        return members;
     }
 }

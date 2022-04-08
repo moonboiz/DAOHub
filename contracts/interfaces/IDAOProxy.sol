@@ -5,7 +5,7 @@ pragma solidity 0.8.13;
 
 interface IDAOProxy {
     
-    function initialize(address _membershipModule) external;
+    function initialize(address _membershipModule, address _treasury) external;
     
     function setMembershipModule(address _module) external;
     

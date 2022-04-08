@@ -8,6 +8,12 @@ import {IMembershipModule} from "../interfaces/IMembershipModule.sol";
 
 contract ERC721MembershipModule is AccessControl, IMembershipModule {
     
+    address private _collection;
+
+    constructor(address collection) {
+        _collection = collection;
+    }
+
     function isMember(address addr) external view returns (bool) {
         return false;
     }
@@ -17,6 +23,8 @@ contract ERC721MembershipModule is AccessControl, IMembershipModule {
     }
 
     function getMembers() external view returns (address[] memory) {
-        return address[];
+        address[] memory members;
+        
+        return members;
     }
 }

@@ -12,11 +12,10 @@ contract DAOProxyFactory is AccessControl {
     // TODO: change to env variable
     address private immutable DAO_HUB_ADDRESS = 0x0000000000000000000000000000000000000000;
     
-    function newDAOProxy(address _membershipModule) external returns(address) {
-        IMembershipModule membershipModule = IMembershipModule(_membershipModule);
+    function newDAOProxy(address _membershipModule, address _treasury) external returns(address) {
         DAOProxy daoProxy = new DAOProxy(DAO_HUB_ADDRESS);
         
-        daoProxy.initialize(membershipModule);
+        daoProxy.initialize(_membershipModule, _treasury);
         
         return address(daoProxy);
     }

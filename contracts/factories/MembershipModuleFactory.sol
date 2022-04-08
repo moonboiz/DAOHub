@@ -10,18 +10,10 @@ import {ERC721MembershipModule} from "../modules/ERC721MembershipModule.sol";
 contract MembershipModuleFactory is AccessControl {
     
     function newERC20MembershipModule(address token) external returns (address) {
-        ERC20MembershipModule module = new ERC20MembershipModule();
-        
-        module.initialize(token);
-        
-        return address(module);
+        return address(new ERC20MembershipModule(token));
     }
 
     function newERC721MembershipModule(address collection) external returns (address) {
-        ERC721MembershipModule module = new ERC721MembershipModule();
-        
-        module.initialize(collection);
-        
-        return address(module);
+        return address(new ERC721MembershipModule(collection));
     }
 }
