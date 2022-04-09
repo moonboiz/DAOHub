@@ -21,8 +21,6 @@ interface IDAOProxy {
 
     function getName() external view returns (string memory);
 
-    function getDescription() external view returns (string memory);
-
     function getLogoURI() external view returns (string memory);
 
     function getMembershipModuleAddress() external view returns (address); 
