@@ -28,7 +28,6 @@ const Dashboard = () => {
     );
 
     const daoProxies = await daoHub.getDAOProxies();
-    console.log(`HERE! ${daoProxies}`);
     const result = await Promise.all(
       daoProxies.map(async (daoProxyAddress) => {
         const daoProxy = new ethers.Contract(
@@ -44,7 +43,6 @@ const Dashboard = () => {
         return { chainId, name, logoUri, treasuryAddress };
       })
     );
-    console.log(result);
     return result;
   }, []);
 
@@ -76,7 +74,10 @@ const Dashboard = () => {
                 />
               </Grid>
               <Grid item lg={8} md={12} xl={9} xs={12}>
-                <SingleDao chosenDaoId={chosenDaoId} />
+                <SingleDao
+                  chainId={1}
+                  tokenAddress={"0x3883f5e181fccaf8410fa61e12b59bad963fb645"}
+                />
               </Grid>
             </Grid>
           </Container>
