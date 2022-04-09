@@ -3,42 +3,20 @@
 pragma solidity 0.8.13;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import {DAOProxy} from "../core/DAOProxy.sol";
-import {IDAOHub} from "../interfaces/IDAOHub.sol";
+import {DAOProxy} from "../dao/DAOProxy.sol";
 import {IMembershipModule} from "../interfaces/IMembershipModule.sol";
 
 
 contract DAOProxyFactory is AccessControl {
 
-    address private  _hub;
-
-    constructor(address hub) {
-        _hub = hub;
-    }
-
-    function newDAOProxy(
-        uint8 chainId,
-        address contractAddress,
-        string calldata name,
-        string calldata description,
-        string calldata logoURI,
-        address membershipModule, 
-        address treasury
-    ) external returns(address) {
-        DAOProxy daoProxy = new DAOProxy();
-        
-        daoProxy.initialize(
-            chainId,
-            contractAddress,
-            name,
-            description,
-            logoURI,
-            membershipModule,
-            treasury
-        );
-
-        IDAOHub(_hub).registerDAOProxy(address(daoProxy));
-        
-        return address(daoProxy);
+    // TODO: change to env variable
+    address private immutable DAO_HUB_ADDRESS = 0x0000000000000000000000000000000000000000;
+    
+    function newDAOProxy(address _membershipModule, address _treasury) external returns(address) {
+//        DAOProxy daoProxy = new DAOProxy(DAO_HUB_ADDRESS);
+//
+//        daoProxy.initialize(_membershipModule, _treasury);
+//
+//        return address(daoProxy);
     }
 }

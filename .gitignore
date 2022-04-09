@@ -1,11 +1,9 @@
 node_modules
-.idea
+.env
+coverage
+coverage.json
+typechain
 
 #Hardhat files
 cache
 artifacts
-
-# production
-/build
-out
-.next

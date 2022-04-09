@@ -19,6 +19,10 @@ contract DAOProxy is AccessControl, IDAOProxy {
     address private _membershipModule;
     address private _treasury;
 
+    constructor(address hub) {
+        _hub = hub;
+    }
+
     function initialize(
         uint8 chainId,
         address contractAddress,
@@ -37,20 +41,28 @@ contract DAOProxy is AccessControl, IDAOProxy {
         _treasury = treasury;
     }
 
+    function isMember(address addr) external view returns (bool) {
+        return IMembershipModule(_membershipModule).isMember(addr);
+    }
+
     function getChainId() external view returns (uint8) {
-        return _chainId;
+        return 0;
     }
 
     function getContractAddress() external view returns (address) {
-        return _contractAddress;
+        return address(this);
     }
 
     function getName() external view returns (string memory) {
-        return _name;
+        return "DAO Name";
+    }
+
+    function getDescription() external view returns (string memory) {
+        return "DAO Description";
     }
 
     function getLogoURI() external view returns (string memory) {
-        return _logoURI;
+        return "https://ipfs.io/ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG";
     }
 
     function getMembershipModuleAddress() external view returns (address) {
@@ -60,9 +72,4 @@ contract DAOProxy is AccessControl, IDAOProxy {
     function getTreasuryAddress() external view returns (address) {
         return _treasury;
     }
-
-    function isMember(address addr) external view returns (bool) {
-        return IMembershipModule(_membershipModule).isMember(addr);
-    }
-
 }
