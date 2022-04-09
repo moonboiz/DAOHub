@@ -74,14 +74,16 @@ const Dashboard = () => {
                   sx={{ height: "100%" }}
                 />
               </Grid>
-              <Grid item lg={8} md={12} xl={9} xs={12}>
-                <SingleDao
-                  chainId={chosenDao.chainId}
-                  tokenAddress={chosenDao.tokenAddress}
-                  daoLogo={chosenDao.logoUri}
-                  daoName={chosenDao.name}
-                />
-              </Grid>
+              {chosenDao && (
+                <Grid item lg={8} md={12} xl={9} xs={12}>
+                  <SingleDao
+                    chainId={chosenDao.chainId}
+                    tokenAddress={chosenDao.tokenAddress}
+                    daoLogo={chosenDao.logoUri}
+                    daoName={chosenDao.name}
+                  />
+                </Grid>
+              )}
             </Grid>
           </Container>
         )}
