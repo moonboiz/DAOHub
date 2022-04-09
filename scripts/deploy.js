@@ -19,17 +19,17 @@ async function main() {
 
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
-  const Token = await ethers.getContractFactory("Token");
-  const token = await Token.deploy();
-  await token.deployed();
+  const DAOHub = await ethers.getContractFactory("DAOHub");
+  const daoHub = await DAOHub.deploy();
+  await daoHub.deployed();
 
-  console.log("Token address:", token.address);
+  console.log("DAOHub address:", daoHub.address);
 
   // We also save the contract's artifacts and address in the frontend directory
-  saveFrontendFiles(token);
+  saveFrontendFiles(daoHub);
 }
 
-function saveFrontendFiles(token) {
+function saveFrontendFiles(daoHub) {
   const fs = require("fs");
   const contractsDir = __dirname + "/../frontend/src/contracts";
 
@@ -39,14 +39,14 @@ function saveFrontendFiles(token) {
 
   fs.writeFileSync(
     contractsDir + "/contract-address.json",
-    JSON.stringify({ Token: token.address }, undefined, 2)
+    JSON.stringify({ DAOHub: daoHub.address }, undefined, 2)
   );
 
-  const TokenArtifact = artifacts.readArtifactSync("Token");
+  const DAOHubArtifact = artifacts.readArtifactSync("DAOHub");
 
   fs.writeFileSync(
-    contractsDir + "/Token.json",
-    JSON.stringify(TokenArtifact, null, 2)
+    contractsDir + "/DAOHub.json",
+    JSON.stringify(DAOHubArtifact, null, 2)
   );
 }
 

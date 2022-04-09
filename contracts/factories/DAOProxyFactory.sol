@@ -13,10 +13,10 @@ contract DAOProxyFactory is AccessControl {
     address private immutable DAO_HUB_ADDRESS = 0x0000000000000000000000000000000000000000;
     
     function newDAOProxy(address _membershipModule, address _treasury) external returns(address) {
-        DAOProxy daoProxy = new DAOProxy(DAO_HUB_ADDRESS);
-        
-        daoProxy.initialize(_membershipModule, _treasury);
-        
-        return address(daoProxy);
+//        DAOProxy daoProxy = new DAOProxy(DAO_HUB_ADDRESS);
+//
+//        daoProxy.initialize(_membershipModule, _treasury);
+//
+//        return address(daoProxy);
     }
 }
