@@ -39,9 +39,7 @@ const AddDao = () => {
       description: Yup.string()
         .max(255)
         .required("DAO description is required"),
-      contractAddress: Yup.string()
-        .max(255)
-        .required("DAO contract address is required"),
+      contractAddress: Yup.string().max(255),
       logoURI: Yup.string(),
       treasuryAddress: Yup.string().max(255),
       coin: Yup.string().max(255).required("NFT/Token address is required"),
