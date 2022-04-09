@@ -1,18 +1,50 @@
 import Head from "next/head";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useAsync } from "react-use";
+import { ethers } from "ethers";
 import { Box, Container, Grid } from "@mui/material";
 import { SingleDao } from "../components/dashboard/single-dao";
 import { DaoList } from "../components/dashboard/dao-list";
 import { DashboardLayout } from "../components/dashboard-layout";
+import DAOHubABI from "../contracts/DAOHub.json";
+import DAOProxyABI from "../contracts/DAOProxy.json";
+import contractAddresses from "../contracts/contract-address.json";
 
 const Dashboard = () => {
-  const [ownerAddress, setOwnerAddress] = useState();
-  useEffect(async () => {
-    const [address] = await window.ethereum.request({
+  const daoList = useAsync(async () => {
+    const { ethereum } = window;
+
+    await ethereum.request({
       method: "eth_requestAccounts",
     });
-    setOwnerAddress(address);
-  });
+
+    const provider = new ethers.providers.Web3Provider(ethereum);
+
+    const signer = provider.getSigner();
+    const daoHub = new ethers.Contract(
+      contractAddresses.DAOHub,
+      DAOHubABI.abi,
+      signer
+    );
+
+    const daoProxies = await daoHub.getDAOProxies();
+    const result = await Promise.all(
+      daoProxies.map(async (daoProxyAddress) => {
+        const daoProxy = new ethers.Contract(
+          daoProxyAddress,
+          DAOProxyABI.abi,
+          signer
+        );
+
+        const chainId = await daoProxy.getChainId();
+        const name = await daoProxy.getName();
+        const logoUri = await daoProxy.getLogoURI();
+        const treasuryAddress = await daoProxy.getTreasuryAddress();
+        return { chainId, name, logoUri, treasuryAddress };
+      })
+    );
+    return result;
+  }, []);
 
   const [chosenDaoId, setChosenDaoId] = useState();
 
@@ -28,23 +60,26 @@ const Dashboard = () => {
           py: 8,
         }}
       >
-        <Container maxWidth={false}>
-          <Grid container spacing={3}>
-            <Grid item lg={4} md={6} xl={3} xs={12}>
-              <DaoList
-                chosenDaoId={chosenDaoId}
-                onDaoClick={(daoId) => {
-                  setChosenDaoId(daoId);
-                }}
-                sx={{ height: "100%" }}
-              />
+        {!daoList.loading && (
+          <Container maxWidth={false}>
+            <Grid container spacing={3}>
+              <Grid item lg={4} md={6} xl={3} xs={12}>
+                <DaoList
+                  daoList={daoList.value}
+                  chosenDaoId={chosenDaoId}
+                  onDaoClick={(daoId) => {
+                    setChosenDaoId(daoId);
+                  }}
+                  sx={{ height: "100%" }}
+                />
+              </Grid>
+                <Grid item lg={8} md={12} xl={9} xs={12}>
+                    <SingleDao chainId={1} tokenAddress={"0x3883f5e181fccaf8410fa61e12b59bad963fb645"}
+                               daoLogo={"https://avatars.githubusercontent.com/u/4224692?v=4"} daoName={"nircoin"} />
+                </Grid>
             </Grid>
-            <Grid item lg={8} md={12} xl={9} xs={12}>
-              <SingleDao chainId={1} tokenAddress={"0x3883f5e181fccaf8410fa61e12b59bad963fb645"}
-                         daoLogo={"https://avatars.githubusercontent.com/u/4224692?v=4"} daoName={"nircoin"} />
-            </Grid>
-          </Grid>
-        </Container>
+          </Container>
+        )}
       </Box>
     </>
   );

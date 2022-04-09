@@ -2,15 +2,13 @@
 
 pragma solidity 0.8.13;
 
-
 interface IDAOProxy {
-    
     function initialize(
         uint8 chainId,
         string calldata name,
         string calldata description,
         string calldata logoURI,
-        address membershipModule, 
+        address membershipModule,
         address treasury
     ) external;
 
@@ -32,7 +30,5 @@ interface IDAOProxy {
 
     function getTreasuryAddress() external view returns (address);
 
-    function setTreasuryAddress(address) external;
-
-    function isMember(address) external view returns (bool);
+    function getTokenAddress() external view returns (address);
 }

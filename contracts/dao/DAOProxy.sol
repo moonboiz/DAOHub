@@ -7,9 +7,7 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IDAOProxy} from "../interfaces/IDAOProxy.sol";
 import {IMembershipModule} from "../interfaces/IMembershipModule.sol";
 
-
 contract DAOProxy is AccessControl, IDAOProxy {
-    
     address private _hub;
     uint8 private _chainId;
     string private _name;
@@ -23,7 +21,7 @@ contract DAOProxy is AccessControl, IDAOProxy {
         string calldata name,
         string calldata description,
         string calldata logoURI,
-        address membershipModule, 
+        address membershipModule,
         address treasury
     ) external {
         _chainId = chainId;
@@ -76,5 +74,9 @@ contract DAOProxy is AccessControl, IDAOProxy {
 
     function isMember(address addr) external view returns (bool) {
         return IMembershipModule(_membershipModule).isMember(addr);
+    }
+
+    function getTokenAddress() external view returns (address) {
+        return IMembershipModule(_membershipModule).getTokenAddress();
     }
 }
