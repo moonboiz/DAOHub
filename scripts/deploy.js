@@ -19,17 +19,37 @@ async function main() {
 
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
+  const hub = await deployHub();
+  const proxyFactory = await deployProxyFactory(hubAddress);
+
+  saveFrontendFiles({
+    DAOHub: hub,
+    DAOProxyFactory: proxyFactory
+  })
+}
+
+async function deployHub() {
   const DAOHub = await ethers.getContractFactory("DAOHub");
   const daoHub = await DAOHub.deploy();
   await daoHub.deployed();
 
-  console.log("DAOHub address:", daoHub.address);
+  console.log("DAOHub address:", hubAddress);
 
-  // We also save the contract's artifacts and address in the frontend directory
-  saveFrontendFiles(daoHub);
+  return daoHub;
 }
 
-function saveFrontendFiles(daoHub) {
+async function deployProxyFactory(hubAddress) {
+  const DAOProxyFactory = await ethers.getContractFactory("DAOProxyFactory");
+  const daoProxyFactory = await DAOProxyFactory.deploy(hubAddress);
+  await daoProxyFactory.deployed();
+
+  console.log("ProxyFactory address:", daoProxyFactory.address);
+
+  return daoProxyFactory;
+}
+
+
+function saveFrontendFiles(deployedContracts) {
   const fs = require("fs");
   const contractsDir = __dirname + "/../frontend/src/contracts";
 
@@ -37,17 +57,24 @@ function saveFrontendFiles(daoHub) {
     fs.mkdirSync(contractsDir);
   }
 
+  let contractAddresses = {};
+  Object.keys(deployedContracts).forEach(contractName => { 
+    contractAddresses[contractName] = deployedContracts[contractName].address; 
+  });
+
   fs.writeFileSync(
     contractsDir + "/contract-address.json",
-    JSON.stringify({ DAOHub: daoHub.address }, undefined, 2)
+    JSON.stringify(contractAddresses, undefined, 2)
   );
 
-  const DAOHubArtifact = artifacts.readArtifactSync("DAOHub");
+  Object.keys(deployedContracts).forEach(contractName => {
+    const contractArtifact = artifacts.readArtifactSync(contractName);
 
-  fs.writeFileSync(
-    contractsDir + "/DAOHub.json",
-    JSON.stringify(DAOHubArtifact, null, 2)
-  );
+    fs.writeFileSync(
+      contractsDir + `/${contractName}.json`,
+      JSON.stringify(contractArtifact, null, 2)
+    );
+  });
 }
 
 main()

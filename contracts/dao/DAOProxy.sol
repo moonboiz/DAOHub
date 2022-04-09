@@ -65,4 +65,8 @@ contract DAOProxy is AccessControl, IDAOProxy {
         return IMembershipModule(_membershipModule).isMember(addr);
     }
 
+    function getTokenAddress() external view returns (address) {
+        return IMembershipModule(_membershipModule).getTokenAddress();
+    }
+
 }

@@ -6,9 +6,16 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import {DAOProxy} from "../dao/DAOProxy.sol";
 import {IDAOHub} from "../interfaces/IDAOHub.sol";
 import {IMembershipModule} from "../interfaces/IMembershipModule.sol";
+import {ERC20MembershipModule} from "../modules/ERC20MembershipModule.sol";
+import {ERC721MembershipModule} from "../modules/ERC721MembershipModule.sol";
 
 
 contract DAOProxyFactory is AccessControl {
+
+    enum MembershipModuleType {
+        ERC20,
+        ERC721
+    }
 
     address private  _hub;
 
@@ -22,10 +29,19 @@ contract DAOProxyFactory is AccessControl {
         string calldata name,
         string calldata description,
         string calldata logoURI,
-        address membershipModule,
+        MembershipModuleType membershipModuleType,
+        address tokenAddress,
         address treasury
     ) external returns(address) {
         DAOProxy daoProxy = new DAOProxy();
+
+        IMembershipModule membershipModule;
+
+        if (membershipModuleType == MembershipModuleType.ERC20) {
+            membershipModule = new ERC20MembershipModule(tokenAddress);
+        } else if (membershipModuleType == MembershipModuleType.ERC721) {
+            membershipModule = new ERC721MembershipModule(tokenAddress);
+        }
 
         daoProxy.initialize(
             chainId,
@@ -33,7 +49,7 @@ contract DAOProxyFactory is AccessControl {
             name,
             description,
             logoURI,
-            membershipModule,
+            address(membershipModule),
             treasury
         );
 

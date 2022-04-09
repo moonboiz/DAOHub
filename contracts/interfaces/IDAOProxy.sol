@@ -26,4 +26,6 @@ interface IDAOProxy {
     function getMembershipModuleAddress() external view returns (address); 
 
     function getTreasuryAddress() external view returns (address);
+
+    function getTokenAddress() external view returns (address);
 }
