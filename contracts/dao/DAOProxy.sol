@@ -41,28 +41,52 @@ contract DAOProxy is AccessControl, IDAOProxy {
         return _chainId;
     }
 
+    function setChainId(string chainId) external view{
+        _chainId = chainId;
+    }
+
+
     function getContractAddress() external view returns (address) {
         return _contractAddress;
+    }
+
+    function setContractAddress(string contractAddress) external {
+        _contractAddress = contractAddress;
     }
 
     function getName() external view returns (string memory) {
         return _name;
     }
 
+    function setName() external {
+        _name = name;
+    }
+
     function getLogoURI() external view returns (string memory) {
         return _logoURI;
+    }
+
+    function setLogoURI(string logoURI) external {
+        _logoURI = logoURI;
     }
 
     function getMembershipModuleAddress() external view returns (address) {
         return _membershipModule;
     }
 
+    function setMembershipModuleAddress(string membershipModule) external {
+        _membershipModule = membershipModule;
+    }
+
     function getTreasuryAddress() external view returns (address) {
         return _treasury;
+    }
+
+    function setTreasuryAddress(string treasury) external {
+        _treasury = treasury;
     }
 
     function isMember(address addr) external view returns (bool) {
         return IMembershipModule(_membershipModule).isMember(addr);
     }
-
 }

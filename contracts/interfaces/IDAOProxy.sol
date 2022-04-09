@@ -17,13 +17,27 @@ interface IDAOProxy {
 
     function getChainId() external view returns (uint8);
 
+    function setChainId(string) external;
+
     function getContractAddress() external view returns (address);
+
+    function setContractAddress(address) external;
 
     function getName() external view returns (string memory);
 
+    function setName(string) external;
+
     function getLogoURI() external view returns (string memory);
 
-    function getMembershipModuleAddress() external view returns (address); 
+    function setName(string) external;
+
+    function getMembershipModuleAddress() external view returns (address);
+
+    function setMembershipModuleAddress(address) external;
 
     function getTreasuryAddress() external view returns (address);
+
+    function setTreasuryAddress(address) external;
+
+    function isMember(address) external view returns (bool);
 }
