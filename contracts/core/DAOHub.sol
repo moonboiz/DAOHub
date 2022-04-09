@@ -7,27 +7,20 @@ import {IDAOHub} from "../interfaces/IDAOHub.sol";
 
 contract DAOHub is AccessControl, IDAOHub {
 
+    address[] private _registeredProxies;
+
+    event DAOProxyRegistered(
+        address indexed daoProxy, 
+        address indexed submitter
+    );
+
     function registerDAOProxy(address daoProxy) external {
+        _registeredProxies.push(daoProxy);
 
+        emit DAOProxyRegistered(daoProxy, msg.sender);
     }
 
-    function emitDAOProxyRegistered(
-        address daoProxy,
-        string memory daoName,
-        address submitter
-    ) external {
-
-    }
-
-    function unregisterDAOProxy(address daoProxy) external {
-
-    }
-
-    function emitDAOProxyUnregistered(
-        address daoProxy,
-        string memory daoName,
-        address submitter
-    ) external {
-        
+    function getDAOProxies() external view returns (address[] memory) {
+        return _registeredProxies;
     }
 }
