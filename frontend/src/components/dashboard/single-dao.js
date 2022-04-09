@@ -1,143 +1,52 @@
-import { format } from "date-fns";
-import { v4 as uuid } from "uuid";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import {
-  Box,
-  Button,
-  Card,
-  CardHeader,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-  Tooltip,
-} from "@mui/material";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import { SeverityPill } from "../severity-pill";
+import * as React from "react";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import Avatar from "@mui/material/Avatar";
+import ImageIcon from "@mui/icons-material/Image";
+import WorkIcon from "@mui/icons-material/Work";
+import BeachAccessIcon from "@mui/icons-material/BeachAccess";
+import Divider from "@mui/material/Divider";
+import { getMembers } from "../../api/getMembers";
+import { useAsync } from "react-use";
 
-const orders = [
-  {
-    id: uuid(),
-    ref: "CDD1049",
-    amount: 30.5,
-    customer: {
-      name: "Ekaterina Tankova",
-    },
-    createdAt: 1555016400000,
-    status: "pending",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1048",
-    amount: 25.1,
-    customer: {
-      name: "Cao Yu",
-    },
-    createdAt: 1555016400000,
-    status: "delivered",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1047",
-    amount: 10.99,
-    customer: {
-      name: "Alexa Richardson",
-    },
-    createdAt: 1554930000000,
-    status: "refunded",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1046",
-    amount: 96.43,
-    customer: {
-      name: "Anje Keizer",
-    },
-    createdAt: 1554757200000,
-    status: "pending",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1045",
-    amount: 32.54,
-    customer: {
-      name: "Clarke Gillebert",
-    },
-    createdAt: 1554670800000,
-    status: "delivered",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1044",
-    amount: 16.76,
-    customer: {
-      name: "Adam Denisov",
-    },
-    createdAt: 1554670800000,
-    status: "delivered",
-  },
-];
+const getRows = async (chainId, tokenAddress) => {
+  const members = await getMembers(chainId, tokenAddress);
+  let rows = [];
+  members.forEach(function (member) {
+    const address = member.address;
+    const daoPart = member.balance / member.total_supply;
+    const logoUrl = member.logo_url;
+    rows.push({ address, daoPart, logoUrl });
+  });
+  console.log(rows);
+  return rows;
+};
 
-export const SingleDao = (props) => (
-  <Card {...props}>
-    <CardHeader title={props.chosenDaoId} />
-    <PerfectScrollbar>
-      <Box sx={{ minWidth: 800 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Order Ref</TableCell>
-              <TableCell>Customer</TableCell>
-              <TableCell sortDirection="desc">
-                <Tooltip enterDelay={300} title="Sort">
-                  <TableSortLabel active direction="desc">
-                    Date
-                  </TableSortLabel>
-                </Tooltip>
-              </TableCell>
-              <TableCell>Status</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {orders.map((order) => (
-              <TableRow hover key={order.id}>
-                <TableCell>{order.ref}</TableCell>
-                <TableCell>{order.customer.name}</TableCell>
-                <TableCell>{format(order.createdAt, "dd/MM/yyyy")}</TableCell>
-                <TableCell>
-                  <SeverityPill
-                    color={
-                      (order.status === "delivered" && "success") ||
-                      (order.status === "refunded" && "error") ||
-                      "warning"
-                    }
-                  >
-                    {order.status}
-                  </SeverityPill>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Box>
-    </PerfectScrollbar>
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "flex-end",
-        p: 2,
-      }}
-    >
-      <Button
-        color="primary"
-        endIcon={<ArrowRightIcon fontSize="small" />}
-        size="small"
-        variant="text"
-      >
-        View all
-      </Button>
-    </Box>
-  </Card>
-);
+export const SingleDao = (chainId, tokenAddress, chosenDaoId) => {
+  const rows2 = useAsync(async () => {
+    return getRows(chainId, tokenAddress);
+  }, []);
+  return (
+    <List sx={{ width: "100%", maxWidth: 500, bgcolor: "background.paper" }}>
+      {!rows2.loading &&
+        rows2.value.map((row) => (
+          <ListItem>
+            <ListItemAvatar>
+              <Avatar alt="Remy Sharp" src={row.logoUrl} />
+            </ListItemAvatar>
+            <ListItemText
+              primary={row.address}
+              secondary={
+                "owns " +
+                parseFloat(row.daoPart * 100).toFixed(2) +
+                "% of this DAO"
+              }
+            />
+            <Divider variant="inset" component="li" />
+          </ListItem>
+        ))}
+    </List>
+  );
+};

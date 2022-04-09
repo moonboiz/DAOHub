@@ -25,7 +25,6 @@ contract DAOProxyFactory is AccessControl {
 
     function newDAOProxy(
         uint8 chainId,
-        address contractAddress,
         string calldata name,
         string calldata description,
         string calldata logoURI,
@@ -45,7 +44,6 @@ contract DAOProxyFactory is AccessControl {
 
         daoProxy.initialize(
             chainId,
-            contractAddress,
             name,
             description,
             logoURI,

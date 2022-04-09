@@ -7,6 +7,7 @@ import {
   Container,
   FormControl,
   InputLabel,
+  Grid,
   Select,
   MenuItem,
   TextField,
@@ -25,17 +26,22 @@ uint8 chainId,
 const AddDao = () => {
   const formik = useFormik({
     initialValues: {
+      name: "",
       networkId: 1,
       contractAddress: "",
       logoURI: "",
       treasury: "",
+      coinType: 1,
+      coin: "",
     },
     validationSchema: Yup.object({
+      name: Yup.string().max(255).required(),
       contractAddress: Yup.string()
         .max(255)
         .required("DAO contract address is required"),
       logoURI: Yup.string().max(255),
       treasuryAddress: Yup.string().max(255),
+      coin: Yup.string().max(255).required("NFT/Token address is required"),
     }),
     onSubmit: () => {
       router.push("/");
@@ -61,12 +67,6 @@ const AddDao = () => {
                 Register a DAO
               </Typography>
             </Box>
-            <Box
-              sx={{
-                pb: 1,
-                pt: 3,
-              }}
-            ></Box>
             <FormControl fullWidth>
               <InputLabel>Network</InputLabel>
               <Select
@@ -81,19 +81,15 @@ const AddDao = () => {
               </Select>
             </FormControl>
             <TextField
-              error={Boolean(
-                formik.touched.contractAddress && formik.errors.contractAddress
-              )}
+              error={Boolean(formik.touched.name && formik.errors.name)}
               fullWidth
-              helperText={
-                formik.touched.contractAddress && formik.errors.contractAddress
-              }
-              label="Contract Address"
+              helperText={formik.touched.name && formik.errors.name}
+              label="Name"
               margin="normal"
-              name="contractAddress"
+              name="name"
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
-              value={formik.values.contractAddress}
+              value={formik.values.name}
               variant="outlined"
             />
             <TextField
@@ -109,6 +105,23 @@ const AddDao = () => {
               variant="outlined"
             />
             <TextField
+              error={Boolean(
+                formik.touched.contractAddress && formik.errors.contractAddress
+              )}
+              fullWidth
+              helperText={
+                formik.touched.contractAddress && formik.errors.contractAddress
+              }
+              label="Contract Address"
+              margin="normal"
+              name="contractAddress"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.contractAddress}
+              variant="outlined"
+              placeholder="0x"
+            />
+            <TextField
               error={Boolean(formik.touched.treasury && formik.errors.treasury)}
               fullWidth
               helperText={formik.touched.treasury && formik.errors.treasury}
@@ -119,7 +132,42 @@ const AddDao = () => {
               onChange={formik.handleChange}
               value={formik.values.treasury}
               variant="outlined"
+              placeholder="0x"
             />
+            <Grid container spacing={3}>
+              <Grid item xs={6} md={3}>
+                <FormControl fullWidth style={{ marginTop: "16px" }}>
+                  <InputLabel>Type</InputLabel>
+                  <Select
+                    name="coinType"
+                    value={formik.values.coinType}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    label="Type"
+                  >
+                    <MenuItem value={1}>Token</MenuItem>
+                    <MenuItem value={2}>NFT</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={18} md={9}>
+                <TextField
+                  error={Boolean(formik.touched.coin && formik.errors.coin)}
+                  fullWidth
+                  helperText={formik.touched.coin && formik.errors.coin}
+                  label={`${
+                    formik.values.coinType == 1 ? "Token" : "NFT"
+                  } Contract Address`}
+                  margin="normal"
+                  name="coin"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  value={formik.values.coin}
+                  variant="outlined"
+                  placeholder="0x"
+                />
+              </Grid>
+            </Grid>
             <Box sx={{ py: 2 }}>
               <Button
                 color="primary"

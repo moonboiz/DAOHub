@@ -16,7 +16,11 @@ async function main() {
     "Deploying the contracts with the account:",
     await deployer.getAddress()
   );
+  // await deployContract(deployer, "DAOHub");
+  await deployContract(deployer, "DAOProxy");
+}
 
+async function deployContract(deployer, contractName) {
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
   const hub = await deployHub();
@@ -24,8 +28,8 @@ async function main() {
 
   saveFrontendFiles({
     DAOHub: hub,
-    DAOProxyFactory: proxyFactory
-  })
+    DAOProxyFactory: proxyFactory,
+  });
 }
 
 async function deployHub() {
@@ -33,7 +37,7 @@ async function deployHub() {
   const daoHub = await DAOHub.deploy();
   await daoHub.deployed();
 
-  console.log("DAOHub address:", daoHub.address);
+  console.log(`Contract ${contractName} address:`, contract.address);
 
   return daoHub;
 }
@@ -48,7 +52,6 @@ async function deployProxyFactory(hubAddress) {
   return daoProxyFactory;
 }
 
-
 function saveFrontendFiles(deployedContracts) {
   const fs = require("fs");
   const contractsDir = __dirname + "/../frontend/src/contracts";
@@ -58,8 +61,8 @@ function saveFrontendFiles(deployedContracts) {
   }
 
   let contractAddresses = {};
-  Object.keys(deployedContracts).forEach(contractName => { 
-    contractAddresses[contractName] = deployedContracts[contractName].address; 
+  Object.keys(deployedContracts).forEach((contractName) => {
+    contractAddresses[contractName] = deployedContracts[contractName].address;
   });
 
   fs.writeFileSync(
@@ -67,7 +70,7 @@ function saveFrontendFiles(deployedContracts) {
     JSON.stringify(contractAddresses, undefined, 2)
   );
 
-  Object.keys(deployedContracts).forEach(contractName => {
+  Object.keys(deployedContracts).forEach((contractName) => {
     const contractArtifact = artifacts.readArtifactSync(contractName);
 
     fs.writeFileSync(
