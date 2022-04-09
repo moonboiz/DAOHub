@@ -14,6 +14,10 @@ contract ERC721MembershipModule is AccessControl, IMembershipModule {
         _collection = collection;
     }
 
+    function getTokenAddress() external view returns (address) {
+        return _collection;
+    }
+
     function isMember(address addr) external view returns (bool) {
         return false;
     }

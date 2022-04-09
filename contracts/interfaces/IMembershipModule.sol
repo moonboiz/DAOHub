@@ -4,6 +4,9 @@ pragma solidity 0.8.13;
 
 
 interface IMembershipModule {    
+    
+    function getTokenAddress() external view returns (address);
+
     /**
      * @notice Gets whether an address (user wallet) is a member of daoName.
      * 

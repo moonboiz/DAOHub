@@ -13,6 +13,10 @@ contract ERC20MembershipModule is AccessControl, IMembershipModule {
     constructor(address token) {
         _token = token;
     }
+
+    function getTokenAddress() external view returns (address) {
+        return _token;
+    }
     
     function isMember(address addr) external view returns (bool) {
         return false;
