@@ -12,7 +12,6 @@ contract DAOProxy is AccessControl, IDAOProxy {
     
     address private _hub;
     uint8 private _chainId;
-    address private _contractAddress;
     string private _name;
     string private _description;
     string private _logoURI;
@@ -21,7 +20,6 @@ contract DAOProxy is AccessControl, IDAOProxy {
 
     function initialize(
         uint8 chainId,
-        address contractAddress,
         string calldata name,
         string calldata description,
         string calldata logoURI,
@@ -29,7 +27,6 @@ contract DAOProxy is AccessControl, IDAOProxy {
         address treasury
     ) external {
         _chainId = chainId;
-        _contractAddress = contractAddress;
         _name = name;
         _description = description;
         _logoURI = logoURI;
@@ -41,24 +38,15 @@ contract DAOProxy is AccessControl, IDAOProxy {
         return _chainId;
     }
 
-    function setChainId(string chainId) external view{
+    function setChainId(uint8 chainId) external {
         _chainId = chainId;
-    }
-
-
-    function getContractAddress() external view returns (address) {
-        return _contractAddress;
-    }
-
-    function setContractAddress(string contractAddress) external {
-        _contractAddress = contractAddress;
     }
 
     function getName() external view returns (string memory) {
         return _name;
     }
 
-    function setName() external {
+    function setName(string calldata name) external {
         _name = name;
     }
 
@@ -66,7 +54,7 @@ contract DAOProxy is AccessControl, IDAOProxy {
         return _logoURI;
     }
 
-    function setLogoURI(string logoURI) external {
+    function setLogoURI(string calldata logoURI) external {
         _logoURI = logoURI;
     }
 
@@ -74,7 +62,7 @@ contract DAOProxy is AccessControl, IDAOProxy {
         return _membershipModule;
     }
 
-    function setMembershipModuleAddress(string membershipModule) external {
+    function setMembershipModuleAddress(address membershipModule) external {
         _membershipModule = membershipModule;
     }
 
@@ -82,7 +70,7 @@ contract DAOProxy is AccessControl, IDAOProxy {
         return _treasury;
     }
 
-    function setTreasuryAddress(string treasury) external {
+    function setTreasuryAddress(address treasury) external {
         _treasury = treasury;
     }
 

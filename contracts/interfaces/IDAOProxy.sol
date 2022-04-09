@@ -7,7 +7,6 @@ interface IDAOProxy {
     
     function initialize(
         uint8 chainId,
-        address contractAddress,
         string calldata name,
         string calldata description,
         string calldata logoURI,
@@ -17,19 +16,15 @@ interface IDAOProxy {
 
     function getChainId() external view returns (uint8);
 
-    function setChainId(string) external;
-
-    function getContractAddress() external view returns (address);
-
-    function setContractAddress(address) external;
+    function setChainId(uint8) external;
 
     function getName() external view returns (string memory);
 
-    function setName(string) external;
+    function setName(string calldata) external;
 
     function getLogoURI() external view returns (string memory);
 
-    function setName(string) external;
+    function setLogoURI(string calldata) external;
 
     function getMembershipModuleAddress() external view returns (address);
 
