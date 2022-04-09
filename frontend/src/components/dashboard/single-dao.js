@@ -8,7 +8,6 @@ import Divider from "@mui/material/Divider";
 import { getMembers } from "../../api/getMembers";
 import { useAsync } from "react-use";
 import LinearIndeterminate from "./progressBar";
-import {Box, Card, CardHeader} from "@mui/material";
 import {getTreasury} from "../../api/getTreasury";
 
 const getRows = async ({chainId, tokenAddress}) => {
