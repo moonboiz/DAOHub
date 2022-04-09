@@ -27,11 +27,11 @@ const getRows = async ({chainId, tokenAddress}) => {
 export const SingleDao = ({chainId, tokenAddress,daoLogo,daoName, treasuryAddress}) => {
   const rows2 = useAsync(async () => {
       return getRows({chainId:chainId, tokenAddress:tokenAddress });
-  }, []);
+  }, [chainId,tokenAddress]);
 
   const money = useAsync(async () => {
       return getTreasury({chainId:chainId, treasuryAddress:treasuryAddress });
-  }, []);
+  }, [chainId,treasuryAddress]);
 
   const title = `${daoName}`
   return (
