@@ -94,8 +94,4 @@ const Dashboard = () => {
 
 Dashboard.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-const handleDaoClick = (daoName) => {
-  alert(daoName);
-};
-
 export default Dashboard;

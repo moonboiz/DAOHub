@@ -1,9 +1,12 @@
 import Head from "next/head";
+import Router from "next/router";
 import { useFormik } from "formik";
+import { useState } from "react";
 import { ethers } from "ethers";
 import * as Yup from "yup";
 import {
   Box,
+  CircularProgress,
   Button,
   Container,
   FormControl,
@@ -19,6 +22,7 @@ import DAOProxyFactory from "../contracts/DAOProxyFactory.json";
 import contractAddresses from "../contracts/contract-address.json";
 
 const AddDao = () => {
+  const [isWorking, setIsWorking] = useState(false);
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -38,11 +42,12 @@ const AddDao = () => {
       contractAddress: Yup.string()
         .max(255)
         .required("DAO contract address is required"),
-      logoURI: Yup.string().max(255),
+      logoURI: Yup.string(),
       treasuryAddress: Yup.string().max(255),
       coin: Yup.string().max(255).required("NFT/Token address is required"),
     }),
-    onSubmit: async () => {
+    onSubmit: async (values, { resetForm }) => {
+      setIsWorking(true);
       const { ethereum } = window;
 
       await ethereum.request({
@@ -58,18 +63,21 @@ const AddDao = () => {
         signer
       );
 
-      await daoProxyFactory.newDAOProxy(
-        formik.values.networkId,
-        formik.values.contractAddress,
-        formik.values.name,
-        formik.values.description,
-        formik.values.logoURI,
-        formik.values.coinType,
-        formik.values.coin,
-        formik.values.treasury
+      const tx = await daoProxyFactory.newDAOProxy(
+        values.networkId,
+        values.contractAddress,
+        values.name,
+        values.description,
+        values.logoURI,
+        values.coinType,
+        values.coin,
+        values.treasury
       );
 
-      router.push("/");
+      await tx.wait();
+
+      resetForm();
+      setIsWorking(false);
     },
   });
 
@@ -210,16 +218,23 @@ const AddDao = () => {
               </Grid>
             </Grid>
             <Box sx={{ py: 2 }}>
-              <Button
-                color="primary"
-                disabled={formik.isSubmitting}
-                fullWidth
-                size="large"
-                type="submit"
-                variant="contained"
-              >
-                Register
-              </Button>
+              {isWorking && (
+                <Grid align="center">
+                  <CircularProgress />
+                </Grid>
+              )}
+              {!isWorking && (
+                <Button
+                  color="primary"
+                  disabled={formik.isSubmitting}
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                >
+                  Register
+                </Button>
+              )}
             </Box>
           </form>
         </Container>
