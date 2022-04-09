@@ -40,7 +40,8 @@ const Dashboard = () => {
               />
             </Grid>
             <Grid item lg={8} md={12} xl={9} xs={12}>
-              <SingleDao chainId={1} tokenAddress={"0x3883f5e181fccaf8410fa61e12b59bad963fb645"} />
+              <SingleDao chainId={1} tokenAddress={"0x3883f5e181fccaf8410fa61e12b59bad963fb645"}
+                         daoLogo={"https://avatars.githubusercontent.com/u/4224692?v=4"} daoName={"nircoin"} />
             </Grid>
           </Grid>
         </Container>
