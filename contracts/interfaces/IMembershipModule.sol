@@ -12,18 +12,4 @@ interface IMembershipModule {
      * @return bool A boolean representing whether the user is a member of daoName.
      */
     function isMember(address addr) external view returns (bool);
-
-    /**
-     * @notice Gets the amount of a members in daoName.
-     * 
-     * @return uint An integer representing the amount of members in daoName.
-     */
-    function getMemberCount() external view returns (uint);
-
-    /**
-     * @notice Gets a list of DAO members addresses.
-     * 
-     * @return address[] An array of address of the members of the DAO.
-     */
-    function getMembers() external view returns (address[] memory);
 }

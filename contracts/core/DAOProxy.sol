@@ -11,6 +11,11 @@ import {IMembershipModule} from "../interfaces/IMembershipModule.sol";
 contract DAOProxy is AccessControl, IDAOProxy {
     
     address private _hub;
+    uint8 private _chainId;
+    address private _contractAddress;
+    string private _name;
+    string private _description;
+    string private _logoURI;
     address private _membershipModule;
     address private _treasury;
 
@@ -18,28 +23,53 @@ contract DAOProxy is AccessControl, IDAOProxy {
         _hub = hub;
     }
 
-    function initialize(address membershipModule, address treasury) external {
+    function initialize(
+        uint8 chainId,
+        address contractAddress,
+        string calldata name,
+        string calldata description,
+        string calldata logoURI,
+        address membershipModule, 
+        address treasury
+    ) external {
+        _chainId = chainId;
+        _contractAddress = contractAddress;
+        _name = name;
+        _description = description;
+        _logoURI = logoURI;
         _membershipModule = membershipModule;
         _treasury = treasury;
-    }
-
-    function setMembershipModule(address membershipModule) external {
-        _membershipModule = membershipModule;
     }
 
     function isMember(address addr) external view returns (bool) {
         return IMembershipModule(_membershipModule).isMember(addr);
     }
 
-    function getMemberCount() external view returns (uint) {
-        return IMembershipModule(_membershipModule).getMemberCount();
+    function getChainId() external view returns (uint8) {
+        return 0;
     }
 
-    function getMembers() external view returns (address[] memory){
-        return IMembershipModule(_membershipModule).getMembers();
+    function getContractAddress() external view returns (address) {
+        return address(this);
     }
 
-    function balanceOf(address token) external view returns (uint) {
-        return IERC20(token).balanceOf(_treasury);
+    function getName() external view returns (string memory) {
+        return "DAO Name";
+    }
+
+    function getDescription() external view returns (string memory) {
+        return "DAO Description";
+    }
+
+    function getLogoURI() external view returns (string memory) {
+        return "https://ipfs.io/ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG";
+    }
+
+    function getMembershipModuleAddress() external view returns (address) {
+        return _membershipModule;
+    }
+
+    function getTreasuryAddress() external view returns (address) {
+        return _treasury;
     }
 }
