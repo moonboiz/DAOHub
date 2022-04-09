@@ -37,7 +37,7 @@ async function deployHub() {
   const daoHub = await DAOHub.deploy();
   await daoHub.deployed();
 
-  console.log(`Contract ${contractName} address:`, contract.address);
+  console.log(`Contract DAOHub address:`, daoHub.address);
 
   return daoHub;
 }
@@ -47,7 +47,7 @@ async function deployProxyFactory(hubAddress) {
   const daoProxyFactory = await DAOProxyFactory.deploy(hubAddress);
   await daoProxyFactory.deployed();
 
-  console.log("ProxyFactory address:", daoProxyFactory.address);
+  console.log("Contract ProxyFactory address:", daoProxyFactory.address);
 
   return daoProxyFactory;
 }
