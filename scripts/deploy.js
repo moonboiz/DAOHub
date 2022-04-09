@@ -20,7 +20,7 @@ async function main() {
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
   const hub = await deployHub();
-  const proxyFactory = await deployProxyFactory(hubAddress);
+  const proxyFactory = await deployProxyFactory(hub.address);
 
   saveFrontendFiles({
     DAOHub: hub,
@@ -33,7 +33,7 @@ async function deployHub() {
   const daoHub = await DAOHub.deploy();
   await daoHub.deployed();
 
-  console.log("DAOHub address:", hubAddress);
+  console.log("DAOHub address:", daoHub.address);
 
   return daoHub;
 }
