@@ -3,6 +3,7 @@
 pragma solidity 0.8.13;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IMembershipModule} from "../interfaces/IMembershipModule.sol";
 
 
@@ -19,6 +20,6 @@ contract ERC20MembershipModule is AccessControl, IMembershipModule {
     }
     
     function isMember(address addr) external view returns (bool) {
-        return false;
+        return IERC20(_token).balanceOf(addr) > 0;
     }
 }
