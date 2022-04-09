@@ -7,3 +7,8 @@ typechain
 #Hardhat files
 cache
 artifacts
+
+# production
+/build
+out
+.next
