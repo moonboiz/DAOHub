@@ -49,8 +49,7 @@ export const SingleDao = ({chainId, tokenAddress,daoLogo,daoName, treasuryAddres
                 <ListItemText
                     primary={
                         title + "  " +
-                        parseFloat(money.value).toFixed(2) +
-                        "$"
+                         money.value.toLocaleString('en-US', {maximumFractionDigits:2}) + "$"
                     }
                     secondary={"members"}
                 />
@@ -64,7 +63,7 @@ export const SingleDao = ({chainId, tokenAddress,daoLogo,daoName, treasuryAddres
             rows2.value.map((row) => (
               <ListItem>
                 <ListItemAvatar>
-                  <Avatar alt="Remy Sharp" src={row.logoUrl} />
+                  <Avatar alt="Remy Sharp" src={daoLogo} />
                 </ListItemAvatar>
                 <ListItemText
                   primary={row.address}
