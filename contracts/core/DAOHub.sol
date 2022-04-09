@@ -17,14 +17,7 @@ contract DAOHub is AccessControl, IDAOHub {
     function registerDAOProxy(address daoProxy) external {
         _registeredProxies.push(daoProxy);
 
-        emitDAOPRoxyRegistered(daoProxy, msg.sender);
-    }
-
-    function emitDAOProxyRegistered(
-        address daoProxy,
-        address submitter
-    ) external {
-        emit DAOProxyRegistered(daoProxy, submitter);
+        emit DAOProxyRegistered(daoProxy, msg.sender);
     }
 
     function getDAOProxies() external view returns (address[] memory) {
