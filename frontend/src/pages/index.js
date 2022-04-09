@@ -26,8 +26,8 @@ const Dashboard = () => {
       DAOHubABI.abi,
       signer
     );
-
     const daoProxies = await daoHub.getDAOProxies();
+
     const result = await Promise.all(
       daoProxies.map(async (daoProxyAddress) => {
         const daoProxy = new ethers.Contract(
@@ -40,13 +40,14 @@ const Dashboard = () => {
         const name = await daoProxy.getName();
         const logoUri = await daoProxy.getLogoURI();
         const treasuryAddress = await daoProxy.getTreasuryAddress();
-        return { chainId, name, logoUri, treasuryAddress };
+        const tokenAddress = await daoProxy.getTokenAddress();
+        return { chainId, name, logoUri, treasuryAddress, tokenAddress };
       })
     );
     return result;
   }, []);
 
-  const [chosenDaoId, setChosenDaoId] = useState();
+  const [chosenDao, setChosenDao] = useState();
 
   return (
     <>
@@ -66,9 +67,9 @@ const Dashboard = () => {
               <Grid item lg={4} md={6} xl={3} xs={12}>
                 <DaoList
                   daoList={daoList.value}
-                  chosenDaoId={chosenDaoId}
-                  onDaoClick={(daoId) => {
-                    setChosenDaoId(daoId);
+                  chosenDao={chosenDao}
+                  onDaoClick={(dao) => {
+                    setChosenDao(dao);
                   }}
                   sx={{ height: "100%" }}
                 />

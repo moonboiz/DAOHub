@@ -54,19 +54,19 @@ const daos = [
 export const DaoList = (props) => {
   return (
     <Card {...props}>
-      <CardHeader
-        subtitle={`${daos.length} in total`}
-        title="Registered DAOs"
-      />
+      <CardHeader title="Registered DAOs" />
       <Divider />
       <List>
         {props.daoList.map((dao, i) => (
           <ListItem divider={i < props.daoList.length - 1} key={dao.id}>
             <ListItemButton
               onClick={() => {
-                props.onDaoClick(dao.id);
+                props.onDaoClick(dao);
               }}
-              selected={props.chosenDaoId == dao.id}
+              selected={
+                props.chosenDao &&
+                props.chosenDao.tokenAddress == dao.tokenAddress
+              }
             >
               <ListItemAvatar>
                 <img
