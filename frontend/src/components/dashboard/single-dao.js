@@ -4,15 +4,14 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
-import ImageIcon from "@mui/icons-material/Image";
-import WorkIcon from "@mui/icons-material/Work";
-import BeachAccessIcon from "@mui/icons-material/BeachAccess";
 import Divider from "@mui/material/Divider";
 import { getMembers } from "../../api/getMembers";
 import { useAsync } from "react-use";
+import LinearIndeterminate from "./progressBar";
+import {Box, Card, CardHeader} from "@mui/material";
 
-const getRows = async (chainId, tokenAddress) => {
-  const members = await getMembers(chainId, tokenAddress);
+const getRows = async ({chainId, tokenAddress}) => {
+  const members = await getMembers({chainId:chainId, tokenAddress:tokenAddress });
   let rows = [];
   members.forEach(function (member) {
     const address = member.address;
@@ -24,29 +23,43 @@ const getRows = async (chainId, tokenAddress) => {
   return rows;
 };
 
-export const SingleDao = (chainId, tokenAddress, chosenDaoId) => {
+export const SingleDao = ({chainId, tokenAddress,daoLogo,daoName}) => {
   const rows2 = useAsync(async () => {
-    return getRows(chainId, tokenAddress);
+    return getRows({chainId:chainId, tokenAddress:tokenAddress });
   }, []);
+  const title = `${daoName}`
   return (
-    <List sx={{ width: "100%", maxWidth: 500, bgcolor: "background.paper" }}>
-      {!rows2.loading &&
-        rows2.value.map((row) => (
-          <ListItem>
-            <ListItemAvatar>
-              <Avatar alt="Remy Sharp" src={row.logoUrl} />
-            </ListItemAvatar>
-            <ListItemText
-              primary={row.address}
-              secondary={
-                "owns " +
-                parseFloat(row.daoPart * 100).toFixed(2) +
-                "% of this DAO"
-              }
-            />
-            <Divider variant="inset" component="li" />
-          </ListItem>
-        ))}
-    </List>
+        <List sx={{ width: "100%", maxWidth: 500, bgcolor: "background.paper" }}>
+            <ListItem>
+                <ListItemAvatar>
+                    <Avatar alt="Remy Sharp" src={daoLogo} />
+                </ListItemAvatar>
+                <ListItemText 
+                    primary={title}
+                    secondary={"members"}
+                />
+            </ListItem>
+            <Divider sx={{ width: "100%", maxWidth: 500}}/>
+            {rows2.loading &&
+            <LinearIndeterminate maxWidth = {500}/>
+            }
+            {!rows2.loading &&
+            rows2.value.map((row) => (
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar alt="Remy Sharp" src={row.logoUrl} />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={row.address}
+                  secondary={
+                    "owns " +
+                    parseFloat(row.daoPart * 100).toFixed(2) +
+                    "% of this DAO"
+                  }
+                />
+                <Divider variant="inset" component="li" />
+              </ListItem>
+            ))}
+        </List>
   );
 };
