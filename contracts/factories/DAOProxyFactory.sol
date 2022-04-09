@@ -3,7 +3,7 @@
 pragma solidity 0.8.13;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import {DAOProxy} from "../core/DAOProxy.sol";
+import {DAOProxy} from "../dao/DAOProxy.sol";
 import {IMembershipModule} from "../interfaces/IMembershipModule.sol";
 
 
