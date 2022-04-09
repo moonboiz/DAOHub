@@ -26,27 +26,6 @@ interface IDAOHub {
     */
     function emitDAOProxyRegistered(
         address daoProxy,
-        string memory daoName,
-        address submitter
-    ) external;
-
-    /**
-    * @notice Unregisters a DAO proxy contract in the hub.
-    * 
-    * @param daoProxy The contract address of a contract implementing IDAOProxy.
-    */
-    function unregisterDAOProxy(address daoProxy) external;
-
-    /**
-    * @dev Helper function to emit a detailed register DAOPRoxy event from the hub, to be consumed by frontends.
-    *
-    * @param daoProxy The contract address of a contract implementing IDAOProxy.
-    * @param daoName The name of the DAO.
-    * @param submitter The address the sumbitter of the DAO registeration.
-    */
-    function emitDAOProxyUnregistered(
-        address daoProxy,
-        string memory daoName,
         address submitter
     ) external;
 }
