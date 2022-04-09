@@ -136,7 +136,7 @@ const AddDao = () => {
             />
             <Grid container spacing={3}>
               <Grid item xs={6} md={3}>
-                <FormControl fullWidth style={{ "margin-top": "16px" }}>
+                <FormControl fullWidth style={{ marginTop: "16px" }}>
                   <InputLabel>Type</InputLabel>
                   <Select
                     name="coinType"
