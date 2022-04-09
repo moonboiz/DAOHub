@@ -30,7 +30,7 @@ const AddDao = () => {
       networkId: 1,
       logoURI: "",
       treasury: "",
-      coinType: 1,
+      coinType: 0,
       coin: "",
     },
     validationSchema: Yup.object({
@@ -56,6 +56,8 @@ const AddDao = () => {
         DAOProxyFactory.abi,
         signer
       );
+
+      console.log(values);
 
       const tx = await daoProxyFactory.newDAOProxy(
         values.networkId,
