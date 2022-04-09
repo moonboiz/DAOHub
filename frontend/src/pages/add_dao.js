@@ -28,7 +28,6 @@ const AddDao = () => {
       name: "",
       description: "",
       networkId: 1,
-      contractAddress: "",
       logoURI: "",
       treasury: "",
       coinType: 1,
@@ -37,7 +36,6 @@ const AddDao = () => {
     validationSchema: Yup.object({
       name: Yup.string().max(255).required("DAO name is required"),
       description: Yup.string().max(255),
-      contractAddress: Yup.string().max(255),
       logoURI: Yup.string(),
       treasuryAddress: Yup.string().max(255),
       coin: Yup.string().max(255).required("NFT/Token address is required"),
@@ -61,7 +59,6 @@ const AddDao = () => {
 
       const tx = await daoProxyFactory.newDAOProxy(
         values.networkId,
-        values.contractAddress,
         values.name,
         values.description,
         values.logoURI,
@@ -148,23 +145,6 @@ const AddDao = () => {
               onChange={formik.handleChange}
               value={formik.values.logoURI}
               variant="outlined"
-            />
-            <TextField
-              error={Boolean(
-                formik.touched.contractAddress && formik.errors.contractAddress
-              )}
-              fullWidth
-              helperText={
-                formik.touched.contractAddress && formik.errors.contractAddress
-              }
-              label="Contract Address"
-              margin="normal"
-              name="contractAddress"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.contractAddress}
-              variant="outlined"
-              placeholder="0x"
             />
             <TextField
               error={Boolean(formik.touched.treasury && formik.errors.treasury)}
