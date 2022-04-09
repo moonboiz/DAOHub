@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { useFormik } from "formik";
+import { ethers } from "ethers";
 import * as Yup from "yup";
 import {
   Box,
@@ -14,19 +15,14 @@ import {
   Typography,
 } from "@mui/material";
 import { DashboardLayout } from "../components/dashboard-layout";
+import DAOProxyFactory from "../contracts/DAOProxyFactory.json";
+import contractAddresses from "../contracts/contract-address.json";
 
-/*
-uint8 chainId,
-        address contractAddress,
-        string calldata name,
-        string calldata logoURI,
-        address membershipModule, (NFT / Token, Address)
-        address treasury
-*/
 const AddDao = () => {
   const formik = useFormik({
     initialValues: {
       name: "",
+      description: "",
       networkId: 1,
       contractAddress: "",
       logoURI: "",
@@ -35,7 +31,10 @@ const AddDao = () => {
       coin: "",
     },
     validationSchema: Yup.object({
-      name: Yup.string().max(255).required(),
+      name: Yup.string().max(255).required("DAO name is required"),
+      description: Yup.string()
+        .max(255)
+        .required("DAO description is required"),
       contractAddress: Yup.string()
         .max(255)
         .required("DAO contract address is required"),
@@ -43,7 +42,33 @@ const AddDao = () => {
       treasuryAddress: Yup.string().max(255),
       coin: Yup.string().max(255).required("NFT/Token address is required"),
     }),
-    onSubmit: () => {
+    onSubmit: async () => {
+      const { ethereum } = window;
+
+      await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+
+      const provider = new ethers.providers.Web3Provider(ethereum);
+
+      const signer = provider.getSigner();
+      const daoProxyFactory = new ethers.Contract(
+        contractAddresses.DAOProxyFactory,
+        DAOProxyFactory.abi,
+        signer
+      );
+
+      await daoProxyFactory.newDAOProxy(
+        formik.values.networkId,
+        formik.values.contractAddress,
+        formik.values.name,
+        formik.values.description,
+        formik.values.logoURI,
+        formik.values.coinType,
+        formik.values.coin,
+        formik.values.treasury
+      );
+
       router.push("/");
     },
   });
@@ -90,6 +115,22 @@ const AddDao = () => {
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               value={formik.values.name}
+              variant="outlined"
+            />
+            <TextField
+              error={Boolean(
+                formik.touched.description && formik.errors.description
+              )}
+              fullWidth
+              helperText={
+                formik.touched.description && formik.errors.description
+              }
+              label="Description"
+              margin="normal"
+              name="description"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.description}
               variant="outlined"
             />
             <TextField
@@ -145,8 +186,8 @@ const AddDao = () => {
                     onBlur={formik.handleBlur}
                     label="Type"
                   >
-                    <MenuItem value={1}>Token</MenuItem>
-                    <MenuItem value={2}>NFT</MenuItem>
+                    <MenuItem value={0}>Token</MenuItem>
+                    <MenuItem value={1}>NFT</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -156,7 +197,7 @@ const AddDao = () => {
                   fullWidth
                   helperText={formik.touched.coin && formik.errors.coin}
                   label={`${
-                    formik.values.coinType == 1 ? "Token" : "NFT"
+                    formik.values.coinType == 0 ? "Token" : "NFT"
                   } Contract Address`}
                   margin="normal"
                   name="coin"
