@@ -16,17 +16,21 @@ async function main() {
     "Deploying the contracts with the account:",
     await deployer.getAddress()
   );
+  // await deployContract(deployer, "DAOHub");
+  await deployContract(deployer, "DAOProxy");
+}
 
+async function deployContract(deployer, contractName) {
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
-  const DAOHub = await ethers.getContractFactory("DAOHub");
-  const daoHub = await DAOHub.deploy();
-  await daoHub.deployed();
+  const contractFactory = await ethers.getContractFactory(contractName);
+  const contract = await contractFactory.deploy();
+  await contract.deployed();
 
-  console.log("DAOHub address:", daoHub.address);
+  console.log(`Contract ${contractName} address:`, contract.address);
 
   // We also save the contract's artifacts and address in the frontend directory
-  saveFrontendFiles(daoHub);
+  saveFrontendFiles(contract);
 }
 
 function saveFrontendFiles(daoHub) {
