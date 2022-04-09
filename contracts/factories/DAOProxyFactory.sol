@@ -3,7 +3,7 @@
 pragma solidity 0.8.13;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import {DAOProxy} from "../core/DAOProxy.sol";
+import {DAOProxy} from "../dao/DAOProxy.sol";
 import {IDAOHub} from "../interfaces/IDAOHub.sol";
 import {IMembershipModule} from "../interfaces/IMembershipModule.sol";
 
@@ -22,11 +22,11 @@ contract DAOProxyFactory is AccessControl {
         string calldata name,
         string calldata description,
         string calldata logoURI,
-        address membershipModule, 
+        address membershipModule,
         address treasury
     ) external returns(address) {
         DAOProxy daoProxy = new DAOProxy();
-        
+
         daoProxy.initialize(
             chainId,
             contractAddress,
