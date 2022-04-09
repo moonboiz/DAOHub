@@ -36,9 +36,7 @@ const AddDao = () => {
     },
     validationSchema: Yup.object({
       name: Yup.string().max(255).required("DAO name is required"),
-      description: Yup.string()
-        .max(255)
-        .required("DAO description is required"),
+      description: Yup.string().max(255),
       contractAddress: Yup.string().max(255),
       logoURI: Yup.string(),
       treasuryAddress: Yup.string().max(255),
