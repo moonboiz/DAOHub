@@ -81,6 +81,7 @@ const Dashboard = () => {
                     tokenAddress={chosenDao.tokenAddress}
                     daoLogo={chosenDao.logoUri}
                     daoName={chosenDao.name}
+                    daoTreasury={chosenDao.treasury}
                   />
                 </Grid>
               )}

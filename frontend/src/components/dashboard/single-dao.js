@@ -9,6 +9,7 @@ import { getMembers } from "../../api/getMembers";
 import { useAsync } from "react-use";
 import LinearIndeterminate from "./progressBar";
 import {Box, Card, CardHeader} from "@mui/material";
+import {getTreasury} from "../../api/getTreasury";
 
 const getRows = async ({chainId, tokenAddress}) => {
   const members = await getMembers({chainId:chainId, tokenAddress:tokenAddress });
@@ -23,10 +24,15 @@ const getRows = async ({chainId, tokenAddress}) => {
   return rows;
 };
 
-export const SingleDao = ({chainId, tokenAddress,daoLogo,daoName}) => {
+export const SingleDao = ({chainId, tokenAddress,daoLogo,daoName, treasuryAddress}) => {
   const rows2 = useAsync(async () => {
-    return getRows({chainId:chainId, tokenAddress:tokenAddress });
+      return getRows({chainId:chainId, tokenAddress:tokenAddress });
   }, []);
+
+  const money = useAsync(async () => {
+      return getTreasury({chainId:chainId, treasuryAddress:treasuryAddress });
+  }, []);
+
   const title = `${daoName}`
   return (
         <List sx={{ width: "100%", maxWidth: 500, bgcolor: "background.paper" }}>
@@ -34,10 +40,22 @@ export const SingleDao = ({chainId, tokenAddress,daoLogo,daoName}) => {
                 <ListItemAvatar>
                     <Avatar alt="Remy Sharp" src={daoLogo} />
                 </ListItemAvatar>
-                <ListItemText 
+                {(money.loading || (!money.loading && money.value <= 0)) &&
+                <ListItemText
                     primary={title}
                     secondary={"members"}
                 />
+                }
+                {(!money.loading && money.value > 0) &&
+                <ListItemText
+                    primary={
+                        title + "  " +
+                        parseFloat(money.value).toFixed(2) +
+                        "$"
+                    }
+                    secondary={"members"}
+                />
+                }
             </ListItem>
             <Divider sx={{ width: "100%", maxWidth: 500}}/>
             {rows2.loading &&
