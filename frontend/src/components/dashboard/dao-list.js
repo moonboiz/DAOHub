@@ -60,8 +60,8 @@ export const DaoList = (props) => {
       />
       <Divider />
       <List>
-        {daos.map((dao, i) => (
-          <ListItem divider={i < daos.length - 1} key={dao.id}>
+        {props.daoList.map((dao, i) => (
+          <ListItem divider={i < props.daoList.length - 1} key={dao.id}>
             <ListItemButton
               onClick={() => {
                 props.onDaoClick(dao.id);
@@ -71,7 +71,7 @@ export const DaoList = (props) => {
               <ListItemAvatar>
                 <img
                   alt={dao.name}
-                  src={dao.imageUrl}
+                  src={dao.logoUri}
                   style={{
                     height: 48,
                     width: 48,
